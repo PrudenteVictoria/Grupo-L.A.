@@ -13,6 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -22,11 +28,7 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
+
 
 h1 {
   font-size: 3.2em;
@@ -64,3 +66,207 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+
+
+
+
+
+
+
+/* gallery gallery */
+
+/* Ventana oculta */
+.carousel-window {
+  overflow: hidden;
+  width: calc(250px * 4 + 16px * 3); /* visible*cardWidth + gaps */
+}
+
+/* Track que se desplaza */
+.carousel-track {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* Card de producto (ancho fijo) */
+.product-card {
+  width: 250px;
+  flex: 0 0 250px; /* evita que se encoja */
+}
+
+/* Ajustes visuales para la imagen dentro de la card */
+.product-card .card-img-top {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+/* Botones flechas */
+.arrow-btn {
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive básico: en pantallas chicas mostrar 1 o 2 visibles (opcional) */
+@media (max-width: 900px) {
+  .carousel-window {
+    width: calc(250px * 2 + 16px * 1);
+  }
+}
+@media (max-width: 600px) {
+  .carousel-window {
+    width: 250px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* main categorias */
+
+
+.categorias-masonry {
+  display: grid;
+  grid-template-areas:
+    "hogar cocina comedor"
+    "living cocina dormitorio";
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: 280px;
+  gap: 15px;
+  margin: 40px;
+}
+
+/* Asignación de áreas */
+.item1 { grid-area: hogar; }
+.item2 { grid-area: living; }
+.item3 { grid-area: cocina; }
+.item4 { grid-area: comedor; }
+.item5 { grid-area: dormitorio; }
+
+.categoria-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+}
+
+.categoria-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.categoria-item:hover img {
+  transform: scale(1.1);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay h3 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.overlay button {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.overlay button:hover {
+  background: white;
+  color: black;
+}
+
+
+
+
+
+
+
+
+
+
+/* main beneficios */
+
+.beneficios {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  flex-wrap: wrap;
+}
+
+.beneficio-item {
+  flex: 1 1 200px;
+  text-align: center;
+  padding: 20px;
+}
+
+.icono {
+  font-size: 40px;
+  color: #c2a68e; /* un color tipo dorado/madera */
+  margin-bottom: 12px;
+}
+
+.titulo {
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+}
+
+.subtitulo {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Responsive: en pantallas pequeñas lo mostrará en 2 columnas o 1 */
+@media (max-width: 800px) {
+  .beneficios {
+    gap: 20px;
+  }
+  .beneficio-item {
+    flex: 1 1 45%;
+  }
+}
+
+@media (max-width: 500px) {
+  .beneficio-item {
+    flex: 1 1 100%;
+  }
+}
+
