@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // import datosProductos from "../assets/productos.json";
 import CarritoCompras from "./Carrito"; 
-import {useAppContext} from "../context/AppContext";
+import {useCartContext} from "../context/CartContext";
 
 function Hogar() {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
-  const {agregarAlCarrito} = useAppContext();
+  const {agregarAlCarrito} = useCartContext();
 
   // useEffect(() => {
   //   try {
@@ -86,13 +86,10 @@ function Hogar() {
 
             <button
               style={{ marginLeft: "10px", marginTop: "10px" }}
-              onClick={() => agregarAlCarrito(producto)}>
-              Comprar
-            </button>
+              onClick={() => agregarAlCarrito(producto)}>Comprar</button>
           </li>
         ))}
       </ul>
-
       {/* Carrito nuevo */}
       <CarritoCompras />
     </>

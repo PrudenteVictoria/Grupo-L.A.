@@ -1,23 +1,19 @@
 import React from 'react';
-import { useAppContext } from '../context/AppContext';
+import { useAuthContext } from '../context/AuthContext';
 
 import { Navigate, useLocation } from 'react-router-dom';
 
-function RutaProtegida({  children }) {
-    const {isAuthenticated} = useAppContext();
-const location = useLocation();
+function RutaProtegida({  children, soloAdmin = false }) {
+    const { usuario } = useAuthContext();
+    const location = useLocation();
 
-    if (!isAuthenticated) {
-        return (
-            <Navigate 
-                to="/iniciar-sesion"  
-                state={{ from: location }} 
-                replace 
-            />
-        );
-    }
+    if (!usuario) {
+        // Pasa el state actual (que contiene el carrito) a /login
+        return <Navigate to="/iniciar-sesion" state={location.state} replace />;
+      }
 
-    return children;
-}
-
-export default RutaProtegida;
+      if (soloAdmin && usuario.nombre !== "admin") {
+        return <Navigate to="/" replace />;
+      }
+      return children;
+    } export default RutaProtegida;

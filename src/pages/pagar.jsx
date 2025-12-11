@@ -1,17 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../context/AppContext';
+import { useCartContext } from '../context/CartContext';
+import { useAuthContext } from '../context/AuthContext';
+import CarritoCompras from "./Carrito"; 
 
 export default function Pagar() {
-    const {usuario, cerrarSesion, carrito, vaciarCarrito} = useAppContext();
+  const { usuario, cerrarSesion } = useAuthContext();
+  const { carrito, total, vaciarCarrito } = useCartContext();
   const navigate = useNavigate();
 
+  const tokenActual = localStorage.getItem('authToken');
 
-  // Calculo del total
-  const total = carrito.reduce((suma, producto) => {
-    const cantidad = Number(producto.cantidad || 1);
-    const precioUnitario = Number(producto.precio || 0);
-    return suma + cantidad * precioUnitario;
-  }, 0);
+
 
   // Función para finalizar compra
   const comprar = () => {
@@ -21,15 +20,29 @@ export default function Pagar() {
   };
 
 
-return (
+  return (
     <div>
-        <div>
-            <h2>{usuario.nombre}</h2>
-            <p>Email: {usuario.email}</p>
-            <button onClick={cerrarSesion}>Cerrar sesión</button>
-            <hr />
+      {/* Info del usuario */}
+      <div>
+        <h2>Hola {usuario.nombre}</h2>
+        <p>Email: {usuario.email}</p>
+       
+        {/* Estilo para el Token */}
+        <div style={{
+          background: '#f0f0f0',
+          padding: '8px',
+          borderRadius: '4px',
+          margin: '10px 0',
+          fontSize: '12px',
+          wordBreak: 'break-all'
+        }}>
+          <strong>Token:</strong> {tokenActual}
         </div>
+        <button onClick={cerrarSesion}>Cerrar sesión</button>
+        <hr />
+      </div>
 
+      {/* Carrito */}
       <div>
         <h2>Tu compra:</h2>
 
@@ -66,6 +79,12 @@ return (
         <button onClick={() => navigate("/")}>
           {carrito.length > 0 ? "Seguir Comprando" : "Volver a Productos"}
         </button>
+      </div>
+      <div style={{ padding: "20px" }}>
+        <h2>Tu Carrito</h2>
+
+        <CarritoCompras />
+      
       </div>
     </div>
   );

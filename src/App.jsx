@@ -10,34 +10,34 @@ import Pagar from './pages/pagar.jsx'
 import RutaProtegida from './pages/RutaProtegida.jsx'
 import IniciarSesion from './pages/IniciarSesion.jsx'
 import Footer from './components/footer.jsx'
-import {AppProvider} from './context/AppContext'
+import {CartProvider} from './context/CartContext.jsx'
+import {AuthProvider} from './context/AuthContext.jsx'
+import Dashboard from "./pages/Dashboard";
+// import FormularioProducto from "./components/FormularioProducto";
 
 function App() {
 
-
-
   return (
-    <>
-    <AppProvider>
-      <Header />
-      <Nav /> 
-      <Routes>
-        <Route path='/' element={<Main />} />
-        <Route path='/hogar' element={<Hogar />} />
-         <Route path='/hogar/:nombre/:id' element={<ProductoDetalle />} />
-         <Route path='/iniciar-sesion' element={<IniciarSesion/>
-          }
-        />
-        <Route path='/pagar' element={<RutaProtegida>
-          <Pagar/>
-          </RutaProtegida>
-        }/>
-      </Routes>   
-      <Footer />
-  
-  </AppProvider>
-  </>
+    <div>
+      <AuthProvider>
+        <CartProvider>
+          <Header />
+          <Nav /> 
+          <Routes>
+            <Route path='/' element={<Main />} />
+            <Route path='/hogar' element={<Hogar />} />
+             <Route path='/hogar/:nombre/:id' element={<ProductoDetalle />} />
+             <Route path='/iniciar-sesion' element={<IniciarSesion/>}/>
 
+            <Route path="/pagar" element={<RutaProtegida><Pagar /></RutaProtegida>}/>
+            <Route path="/dashboard" element={<RutaProtegida soloAdmin={true}><Dashboard /></RutaProtegida>}/>
+
+          </Routes>   
+          <Footer />
+
+        </CartProvider>
+      </AuthProvider>
+    </div>
   );
 } export default App
 

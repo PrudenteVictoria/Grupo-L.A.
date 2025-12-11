@@ -1,31 +1,47 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAppContext } from '../context/AppContext';
+import { useAuthContext } from '../context/AuthContext';
 
 
 export default function IniciarSesion() {
+  const { iniciarSesion } = useAuthContext();
   const navigate = useNavigate();
   const ubicacion = useLocation();
 
-  const {setIsAuthenticated, setUsuario} = useAppContext();
   const [formulario, setFormulario] = useState({ nombre: '', email: '' });
 
   const manejarEnvio = (e) => {
     e.preventDefault();
-    if (formulario.nombre && formulario.email) {
-      setIsAuthenticated(true);
-      setUsuario(formulario);
+    // Verificar credenciales (admin/1234@admin)
+    if (formulario.nombre === "admin" && formulario.email === "1234@admin") {  
+    // Guarda el email ingresado y pasa nombre para el token admin
+      localStorage.setItem("authEmail", formulario.email);
+      iniciarSesion("admin");
+      navigate("/dashboard");
+    }
+
+ // Lógica para usuarios normales - SOLO si NO es admin
+    else if (
+      formulario.nombre &&
+      formulario.email &&
+      formulario.nombre !== "admin"
+    ) {
+  // Guarda el email ingresado y pasa nombre para el token user
+  localStorage.setItem("authEmail", formulario.email);
+  iniciarSesion(formulario.nombre);
 
       // Si venía del carrito, redirige a pagar
-      if (ubicacion.state?.from?.pathname === "/pagar") {
-        navigate("/pagar", { state: ubicacion.state.from.state });
+      if (ubicacion.state?.carrito) {
+        navigate("/pagar", { state: { carrito: ubicacion.state.carrito } });
       } else {
         navigate("/");
       }
     } else {
-      alert('Completa todos los datos');
+      alert(
+        "Credenciales de administrador incorrectas. Usa: admin / 1234@admin"
+      );
     }
-};
+  };
 
 return (
     <div>
