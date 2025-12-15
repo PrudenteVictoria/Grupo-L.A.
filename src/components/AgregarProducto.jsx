@@ -1,44 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useProducts } from '../context/ProductsContext';
+import React, { useState } from 'react';
 
 function FormularioProducto() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { agregarProducto, editarProducto, validar } = useProducts();
- 
-  // Obtener el producto pasado por el state
-  const productoRecibido = location.state?.producto;
- 
-  // Determina el modo
-  const modo = productoRecibido ? "editar" : "agregar";
- 
   // Estados del componente
-  const [producto, setProducto] = useState({
-    id: '',
-    nombre: '',
-    precio: '',
-    descripcion: '',
-    categoria: '',
-    avatar: ''
-  });
- 
+  const [producto, setProducto] = useState({nombre: '', precio: '', descripcion: '', categoria: '', avatar: ''});
   const [errores, setErrores] = useState({});
   const [cargando, setCargando] = useState(false);
 
-  // Cargar datos del producto si estamos en modo editar
-  useEffect(() => {
-    if (modo === "editar" && productoRecibido) {
-      setProducto({
-        id: productoRecibido.id || '',
-        nombre: productoRecibido.nombre || '',
-        precio: productoRecibido.precio || '',
-        descripcion: productoRecibido.descripcion || '',
-        categoria: productoRecibido.categoria || '',
-        avatar: productoRecibido.avatar || ''
-      });
-    }
-  }, [modo, productoRecibido]);
 
   // f(x) manejarCambios | inputs
   const manejarCambio = (e) => {
@@ -55,82 +22,97 @@ function FormularioProducto() {
     }
   };
 
-  // f(x) validarFormulario - ahora usa la validación del contexto
+  // f(x) validarFormulario
   const validarFormulario = () => {
-    const resultado = validar(producto);
-    setErrores(resultado.errores);
-    return resultado.esValido;
+    const errorDeCarga = {};
+
+    // nombre
+    if (!producto.nombre.trim()) {
+      errorDeCarga.nombre = 'El nombre es obligatorio.';
+    }
+
+    // precio
+    if (!producto.precio.trim()) {
+      errorDeCarga.precio = 'El precio es obligatorio.';
+    } else {
+      const precioLimpio = producto.precio.replace(/\./g, '').replace(',', '.');
+      const precioNumerico = parseFloat(precioLimpio);
+     
+      if (!/^[\d.,]+$/.test(producto.precio.replace(/\./g, ''))) {
+        errorDeCarga.precio = 'Solo números, puntos o comas.';
+      } else if (isNaN(precioNumerico)) {
+        errorDeCarga.precio = 'Precio no válido.';
+      } else if (precioNumerico <= 0) {
+        errorDeCarga.precio = 'Debe ser mayor a 0.';
+      }
+    }
+
+    // descripción
+    if (!producto.descripcion.trim()) {
+      errorDeCarga.descripcion = 'La descripción es obligatoria.';
+    } else if (producto.descripcion.length < 10) {
+      errorDeCarga.descripcion = 'Mínimo 10 caracteres.';
+    } else if (producto.descripcion.length > 200) {
+      errorDeCarga.descripcion = 'Máximo 200 caracteres.';
+    }
+
+    setErrores(errorDeCarga);
+    return Object.keys(errorDeCarga).length === 0;
   };
 
-  const manejarEnvio = async (e) => {
-    e.preventDefault();
-   
-    // Valida antes de enviar usando el contexto
-    if (!validarFormulario()) return;
-
-    setCargando(true);
+  // f(x) para agregarProducto
+  const agregarProducto = async (producto) => {
     try {
       const productoEnviar = {
         ...producto,
-        precio: producto.precio.toString().replace(',', '.')
+        precio: producto.precio.replace(',', '.')
       };
 
-      if (modo === "agregar") {
-        // Usar el contexto para agregar producto
-        const nuevoProducto = await agregarProducto(productoEnviar);
-        alert(`Producto "${nuevoProducto.nombre}" agregado correctamente con ID: ${nuevoProducto.id}`);
-       
-        // Limpiar formulario después del éxito
-        setProducto({
-          id: '',
-          nombre: '',
-          precio: '',
-          descripcion: '',
-          categoria: '',
-          avatar: ''
-        });
+      const respuesta = await fetch('https://68f99215ef8b2e621e7ca343.mockapi.io/api/productos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productoEnviar),
+      });
 
-        setTimeout(() => {
-          navigate('/productos');
-        }, 100);
+      if (!respuesta.ok) throw new Error('Error al agregar el producto.');
 
-      } else {
-        // Usar el contexto para editar producto
-        await editarProducto(productoEnviar);
-        alert('Producto actualizado correctamente');
-
-        setTimeout(() => {
-          navigate('/productos');
-        }, 100);
-      }
-     
-      setErrores({});
-     
+      const data = await respuesta.json();
+      alert('Producto agregado correctamente');
+      return data;
     } catch (error) {
-      alert(`Hubo un problema al ${modo === "editar" ? 'actualizar' : 'agregar'} el producto`);
+      alert('Hubo un problema al agregar el producto.');
+      throw error;
+    }
+  };
+
+
+  // f(x) manejarEnvio
+  const manejarEnvio = async (e) => {
+    e.preventDefault();
+   
+    // Validar antes de enviar
+    if (!validarFormulario()) return;
+
+
+    setCargando(true);
+    try {
+      await agregarProducto(producto);
+     
+      // Limpiar formulario después del éxito
+      setProducto({nombre: '', precio: '', descripcion: '', categoria: '', avatar: ''});
+      setErrores({});
+    } catch (error) {
       console.error('Error:', error);
     } finally {
       setCargando(false);
     }
   };
 
-  const cancelarEdicion = () => {
-    if (modo === "editar") {
-      alert('Edición cancelada');
-      navigate('/productos');
-    }
-  };
 
   // Renderizado del componente
   return (
     <form onSubmit={manejarEnvio} style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
-      <h2>{modo === "editar" ? 'Editar' : 'Agregar'} Producto</h2>
-     
-      {modo === "editar" && productoRecibido && (
-        <p style={{ color: '#666', fontStyle: 'italic' }}>
-          Editando: {productoRecibido.nombre} (ID: {productoRecibido.id})
-        </p>
-      )}
+      <h2>Agregar Producto</h2>
      
       {/* Campo Nombre */}
       <div style={{ marginBottom: '15px' }}>
@@ -154,6 +136,7 @@ function FormularioProducto() {
         {errores.nombre && <p style={{ color: 'red', margin: '5px 0', fontSize: '14px' }}>{errores.nombre}</p>}
       </div>
 
+
       {/* Campo Precio */}
       <div style={{ marginBottom: '15px' }}>
         <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
@@ -165,7 +148,7 @@ function FormularioProducto() {
           value={producto.precio}
           onChange={manejarCambio}
           disabled={cargando}
-          placeholder="Ej: 40.000"
+          placeholder="Ej: 40.000 o 40.000,50"
           inputMode="decimal"
           style={{
             width: '100%',
@@ -202,6 +185,7 @@ function FormularioProducto() {
         />
       </div>
 
+
       {/* Campo Avatar URL */}
       <div style={{ marginBottom: '15px' }}>
         <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
@@ -222,6 +206,7 @@ function FormularioProducto() {
           }}
         />
       </div>
+
 
       {/* Campo Descripción */}
       <div style={{ marginBottom: '20px' }}>
@@ -256,46 +241,20 @@ function FormularioProducto() {
         )}
       </div>
 
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-        <button
-          type="submit"
-          disabled={cargando}
-          style={{
-            flex: 1,
-            padding: '12px',
-            backgroundColor: cargando ? '#ccc' : 'darkolivegreen',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '16px',
-            cursor: cargando ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {cargando
-            ? (modo === "editar" ? 'Actualizando...' : 'Agregando...')
-            : (modo === "editar" ? 'Confirmar Cambios' : 'Agregar Producto')
-          }
-        </button>
-       
-        {modo === "editar" && (
-          <button
-            type="button"
-            onClick={cancelarEdicion}
-            style={{
-              flex: 1,
-              padding: '12px',
-              backgroundColor: '#6c757d',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Cancelar
-          </button>
-        )}
-      </div>
-     
+
+      <button
+        type="submit"
+        disabled={cargando}
+        style={{width: '100%',padding: '12px', backgroundColor: cargando ? '#ccc' : 'darkolivegreen',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          fontSize: '16px',
+          cursor: cargando ? 'not-allowed' : 'pointer'
+        }}
+      >
+        {cargando ? 'Agregando...' : 'Agregar Producto'}
+      </button>
       <p>(*) Campos obligatorios</p>
     </form>
   );

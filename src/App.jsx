@@ -1,47 +1,106 @@
 import './App.css'
 import { Routes, Route } from "react-router-dom";
 
-import Header from './components/header.jsx'
-import Nav from './components/nav.jsx'
 import Main from './pages/Inicio.jsx'
 import Hogar from './pages/hogar.jsx'
 import ProductoDetalle from './pages/detalle_producto.jsx';
 import Pagar from './pages/pagar.jsx'
 import RutaProtegida from './pages/RutaProtegida.jsx'
 import IniciarSesion from './pages/IniciarSesion.jsx'
-import Footer from './components/footer.jsx'
 import {CartProvider} from './context/CartContext.jsx'
 import {AuthProvider} from './context/AuthContext.jsx'
+import { ProductsProvider } from "./context/ProductsContext";
 import Dashboard from "./pages/Dashboard";
-// import FormularioProducto from "./components/FormularioProducto";
+import FormularioProducto from "./components/AgregarProducto.jsx"
+import EditarProductos from "./components/EditarProductos.jsx"
+import EliminarProducto from './components/EliminarProducto.jsx';
+import Layout from './components/Layout';
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css"
+
 
 function App() {
-
   return (
     <div>
       <AuthProvider>
-        <CartProvider>
-          <Header />
-          <Nav /> 
-          <Routes>
-            <Route path='/' element={<Main />} />
-            <Route path='/hogar' element={<Hogar />} />
-             <Route path='/hogar/:nombre/:id' element={<ProductoDetalle />} />
-             <Route path='/iniciar-sesion' element={<IniciarSesion/>}/>
+        <ProductsProvider>
+          <CartProvider>
+            <Layout>
 
-            <Route path="/pagar" element={<RutaProtegida><Pagar /></RutaProtegida>}/>
-            <Route path="/dashboard" element={<RutaProtegida soloAdmin={true}><Dashboard /></RutaProtegida>}/>
 
-          </Routes>   
-          <Footer />
+              <Routes>
+                <Route path='/' element={<Main />} />
+                <Route path='/hogar' element={<Hogar />} />
+                <Route path='/hogar/:nombre/:id' element={<ProductoDetalle />} />
+                <Route path='/iniciar-sesion' element={<IniciarSesion/>}/>
 
-        </CartProvider>
+                <Route
+                  path="/pagar"
+                  element={
+                    <RutaProtegida>
+                      <Pagar />
+                    </RutaProtegida>
+                  }
+                />
+
+                <Route
+                  path="/dashboard"
+                  element={
+                    <RutaProtegida soloAdmin={true}>
+                      <Dashboard />
+                    </RutaProtegida>
+                  }
+                />
+
+                <Route
+                  path="/agregar-producto"
+                  element={
+                    <RutaProtegida soloAdmin={true}>
+                      <FormularioProducto />
+                    </RutaProtegida>
+                  }
+                />
+
+                <Route
+                  path='/editar-productos'
+                  element={
+                    <RutaProtegida soloAdmin={true}>
+                      <EditarProductos />
+                    </RutaProtegida>
+                  }
+                />
+
+                <Route
+                  path='/eliminar-productos'
+                  element={
+                    <RutaProtegida soloAdmin={true}>
+                      <EliminarProducto />
+                    </RutaProtegida>
+                  }
+                />
+              </Routes>
+
+              <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                closeOnClick
+                draggable
+                pauseOnHover
+              />
+
+
+            </Layout>
+          </CartProvider>
+        </ProductsProvider>
       </AuthProvider>
     </div>
   );
-} export default App
-
-
+} export default App;
 
 
 

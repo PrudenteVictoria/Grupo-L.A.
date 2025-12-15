@@ -1,41 +1,57 @@
 // Hogar.jsx
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-// import datosProductos from "../assets/productos.json";
-import CarritoCompras from "./Carrito"; 
-import {useCartContext} from "../context/CartContext";
+import { useState} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import CarritoCompras from "./Carrito";
+import { useCartContext } from "../context/CartContext";
+import { useAuthContext } from "../context/AuthContext";
+import { useProducts } from "../context/ProductsContext";
 
 function Hogar() {
-  const [productos, setProductos] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState(null);
+  const { productos, cargando, error } = useProducts();
+  const { agregarAlCarrito } = useCartContext();
+  const { usuario } = useAuthContext();
+  const navigate = useNavigate();
 
-  const {agregarAlCarrito} = useCartContext();
+  const [busqueda, setBusqueda] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
 
-  // useEffect(() => {
-  //   try {
-  //     setProductos(datosProductos.productos);
-  //     setCargando(false);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     setError("Hubo un problema al cargar los productos.");
-  //     setCargando(false);
-  //   }
-  // }, []);
 
-  useEffect(() => {
-    fetch("https://68f99215ef8b2e621e7ca343.mockapi.io/api/productos")
-      .then((respuesta) => respuesta.json())
-      .then((datos) => {
-        setProductos(datos);
-        setCargando(false);
-      })
-      .catch((error) => {
-        console.error("Error!", error);
-        setError("Hubo un problema al cargar los productos.");
-        setCargando(false);
-      });
-  }, []);
+
+  const productosPorPagina = 6;
+
+
+  const manejarEliminar = (producto) => {
+    // Navegar a la página de confirmación de eliminación
+    navigate('/eliminar-producto', { state: { producto } });
+  };
+
+  const manejarEditar = (producto) => {
+    // Navegar al formulario de edición
+    navigate('/formulario-producto', { state: { producto } });
+  };
+
+    const productosFiltrados = productos.filter(
+    (producto) =>
+      producto.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+      (producto.categoria &&
+        producto.categoria.toLowerCase().includes(busqueda.toLowerCase()))
+  );
+
+  const indiceUltimoProducto = paginaActual * productosPorPagina;
+  const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
+  const productosActuales = productosFiltrados.slice(indicePrimerProducto, indiceUltimoProducto);
+ 
+  // Cambiar de página
+  const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+  const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina);
+
+
+  // Resetear a página 1 con búsquedas
+  const manejarBusqueda = (e) => {
+    setBusqueda(e.target.value);
+    setPaginaActual(1);
+  };
+
 
 
   if (cargando) return <p>Cargando productos...</p>;
@@ -43,57 +59,120 @@ function Hogar() {
 
   return (
     <>
-      <ul
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "20px",
-          padding: "0",
-          listStyle: "none",
-        }}
-      >
-        {productos.map((producto) => (
-          <li
-            key={producto.id}
-            style={{
-              width: "250px",
-              border: "1px solid #ccc",
-              padding: "10px",
-              borderRadius: "8px",
-            }}
-          >
-            <strong>{producto.nombre}</strong>
-            <br />
-            {producto.descripcion}
-            <br />
-            Precio: ${producto.precio}
-            <br />
-            <img
-              src={producto.avatar}
-              style={{
-                width: "100%",
-                height: "200px",
-                objectFit: "cover",
-              }}
+      <div className="container mt-4">
+        {/* Barra de búsqueda */}
+        <div className="row mb-4">
+          <div className="col-12 col-md-6">
+            <label className="form-label fw-bold">Buscar productos</label>
+            <input
+              type="text"
+              placeholder="Buscar por nombre o categoría..."
+              className="form-control"
+              value={busqueda}
+              onChange={manejarBusqueda}
             />
+            {busqueda && (
+              <small className="text-muted">
+                Mostrando {productosFiltrados.length} de {productos.length} productos
+              </small>
+            )}
+          </div>
+        </div>
 
-            <Link
-              to={`/hogar/${producto.categoria || "sin-categoria"}/${producto.id}`}
-              state={{ producto }}
-            >
-              <button style={{ marginTop: "10px" }}>Más detalle</button>
-            </Link>
 
-            <button
-              style={{ marginLeft: "10px", marginTop: "10px" }}
-              onClick={() => agregarAlCarrito(producto)}>Comprar</button>
-          </li>
-        ))}
-      </ul>
-      {/* Carrito nuevo */}
-      <CarritoCompras />
+        {/* Grid de productos */}
+        <div className="row">
+          {productosActuales.map((producto) => (
+            <div key={producto.id} className="col-12 col-md-6 col-lg-4 mb-4">
+              <div className="card h-100">
+                <img
+                  src={producto.avatar}
+                  alt={producto.nombre}
+                  className="card-img-top"
+                  style={{ height: "200px", objectFit: "cover" }}
+                />
+               
+                <div className="card-body d-flex flex-column">
+                  <h5 className="card-title">{producto.nombre}</h5>
+                  <p className="card-text flex-grow-1">
+                    {producto.descripcion}
+                  </p>
+                  <p className="card-text fw-bold text-primary">
+                    ${producto.precio}
+                  </p>
+                 
+                  <div className="mt-auto">
+                    <div className="d-grid gap-2">
+                      <Link
+                        to={`/productos/${producto.id}`}
+                        state={{producto}}
+                        className="btn btn-outline-primary btn-sm"
+                      >
+                        Ver detalles
+                      </Link>
+                      <button
+                        onClick={() => agregarAlCarrito(producto)}
+                        className="btn btn-sm"
+                        style={{ backgroundColor: '#556B2F', color: 'white' }}
+                      >
+                        Agregar al carrito
+                      </button>
+                    </div>
+
+
+                    {/* Botones de admin */}
+                  {usuario && usuario.email === "admin@admin.com" && (
+                      <div className="mt-3 pt-3 border-top">
+                        <div className="d-flex gap-2">
+                          <button
+                            onClick={() => manejarEditar(producto)}
+                            className="btn btn-warning btn-sm flex-fill"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => manejarEliminar(producto)}
+                            className="btn btn-danger btn-sm flex-fill"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+
+        {/* Paginador - Estilo simplificado */}
+        {productosFiltrados.length > productosPorPagina && (
+          <div className="d-flex justify-content-center my-4">
+            {Array.from({ length: totalPaginas }, (_, index) => (
+              <button
+                key={index + 1}
+                className={`btn mx-1 ${paginaActual === index + 1 ? "btn-primary" : "btn-outline-primary"}`}
+                onClick={() => cambiarPagina(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
+
+
+        {/* Información de la página actual */}
+        {productosFiltrados.length > 0 && (
+          <div className="text-center text-muted mt-2">
+            <small>
+              Mostrando {productosActuales.length} productos
+              (página {paginaActual} de {totalPaginas})
+            </small>
+          </div>
+        )}
+      </div>
     </>
   );
-}
-
-export default Hogar;
+} export default Hogar;

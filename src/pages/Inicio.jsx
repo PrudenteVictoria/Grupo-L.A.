@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+// import styled from "styled-components"
 import { FaTruck, FaCreditCard, FaStar, FaShoppingCart } from "react-icons/fa";
 import { useState, useRef, useEffect } from "react";
 

@@ -1,59 +1,66 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-// Crear el contexto de autenticación
 export const AuthContext = createContext();
 
-// Proveedor de autenticación
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
+  const [cargando, setCargando] = useState(true)
 
-  // Verificar token al cargar la aplicación
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const emailGuardado = localStorage.getItem("authEmail");
+    const rolGuardado = localStorage.getItem("authRol");
+
     if (token) {
       const username = token.replace("fake-token-", "");
       setUsuario({
         nombre: username,
         email: emailGuardado || "",
+        rol: rolGuardado || "user",
       });
     }
+    setCargando(false);
   }, []);
 
-  // Función para iniciar sesión
-  const iniciarSesion = (username) => {
+  const iniciarSesion = (username, emailIngresado) => {
     const token = `fake-token-${username}`;
     localStorage.setItem("authToken", token);
+    localStorage.setItem("authEmail", emailIngresado);
 
-    const emailGuardado = localStorage.getItem("authEmail");
+
+    // Si el nombre es admin, asignamos rol admin
+    const rol = username === "admin" ? "admin" : "user";
+    localStorage.setItem("authRol", rol);
+
     setUsuario({
       nombre: username,
-      email: emailGuardado || "",
+      email: emailIngresado || "",
+      rol,
     });
   };
 
-  // Función para cerrar sesión
   const cerrarSesion = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("authEmail");
+    localStorage.removeItem("authRol");
     setUsuario(null);
   };
 
-  const value = {
-    usuario,
-    iniciarSesion,
-    cerrarSesion,
-    isAuthenticated: !!usuario, // ← Propiedad computada
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        usuario,
+        iniciarSesion,
+        cerrarSesion,
+        isAuthenticated: !!usuario,
+        cargando,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
-// Hook personalizado
 export function useAuthContext() {
   const context = useContext(AuthContext);
   if (!context) {

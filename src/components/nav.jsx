@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext} from '../context/AuthContext'
 import { useCartContext } from '../context/CartContext';
 
@@ -7,7 +7,18 @@ import { useCartContext } from '../context/CartContext';
 function Nav() {
   const { usuario, isAuthenticated, cerrarSesion } = useAuthContext();
   const { carrito } = useCartContext();
+  const {vaciarCarrito} = useCartContext();
+  const navigate= useNavigate();
 
+  const manejarCerrarSesion = () => {
+    navigate("/");
+
+    // Tiempo 1'' para asegurar la navegación
+    setTimeout(() => {
+      vaciarCarrito();
+      cerrarSesion();
+    }, 100);
+  };
   // const {carrito} = useCartContext();
   
 
@@ -84,7 +95,7 @@ function Nav() {
               <Link to="/pagar" style={{ margin: "0 10px", color: "white", textDecoration: "none" }}>
                 Carrito ({carrito.length})
               </Link>
-              <button onClick={cerrarSesion}>
+              <button onClick={manejarCerrarSesion}>
                 Cerrar Sesión
               </button>
             </div>
