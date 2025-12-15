@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useProducts } from "../context/ProductsContext";
 
 
 function EditarProductos() {
@@ -7,6 +8,7 @@ function EditarProductos() {
   const navigate = useNavigate();
   const productoOriginal = state.producto;
 
+  const { editarProducto } = useProducts();
 
   const [producto, setProducto] = useState({
     ...productoOriginal,
@@ -27,24 +29,19 @@ function EditarProductos() {
     try {
       const productoEnviar = {
         ...producto,
-        precio: producto.precio.replace(',', '.')
+        precio: producto.precio.toString().replace(',', '.')
       };
-      const respuesta = await fetch(`https://68f99215ef8b2e621e7ca343.mockapi.io/api/productos/${producto.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(productoEnviar),
-      });
-      if (!respuesta.ok) throw new Error('Error al actualizar');
-      alert('Producto actualizado correctamente');
-      navigate('/');
-    } catch (error) {
-      alert('Error al actualizar el producto');
-      console.error(error);
-    } finally {
-      setCargando(false);
-    }
-  };
-
+        await editarProducto(productoEnviar); // 🔥 ACTUALIZA CONTEXTO
+        
+        alert('Producto actualizado correctamente');
+        navigate('/hogar');
+      } catch (error) {
+        alert('Error al actualizar el producto');
+        console.error(error);
+      } finally {
+        setCargando(false);
+      }
+    };
 
   const cancelarEdicion = () => {
     alert('Edición cancelada');

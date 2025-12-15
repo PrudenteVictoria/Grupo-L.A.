@@ -1,4 +1,4 @@
-// Hogar.jsx
+// ficcion.jsx
 import { useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CarritoCompras from "./Carrito";
@@ -20,15 +20,14 @@ function Hogar() {
   const productosPorPagina = 6;
 
 
-  const manejarEliminar = (producto) => {
-    // Navegar a la página de confirmación de eliminación
-    navigate('/eliminar-producto', { state: { producto } });
-  };
+const manejarEliminar = (producto) => {
+  navigate('/eliminar-productos', { state: { producto } });
+};
 
-  const manejarEditar = (producto) => {
-    // Navegar al formulario de edición
-    navigate('/formulario-producto', { state: { producto } });
-  };
+const manejarEditar = (producto) => {
+  navigate('/editar-productos', { state: { producto } });
+};
+
 
     const productosFiltrados = productos.filter(
     (producto) =>
@@ -103,13 +102,14 @@ function Hogar() {
                  
                   <div className="mt-auto">
                     <div className="d-grid gap-2">
-                      <Link
-                        to={`/productos/${producto.id}`}
-                        state={{producto}}
-                        className="btn btn-outline-primary btn-sm"
-                      >
-                        Ver detalles
-                      </Link>
+                    <Link
+                      to={`/productos/${producto.id}`}
+                      state={{ producto }}
+                      className="btn btn-outline-primary btn-sm"
+                    >
+                      Ver detalles
+                    </Link>
+
                       <button
                         onClick={() => agregarAlCarrito(producto)}
                         className="btn btn-sm"
@@ -121,7 +121,7 @@ function Hogar() {
 
 
                     {/* Botones de admin */}
-                  {usuario && usuario.email === "admin@admin.com" && (
+                      {usuario && usuario.rol === "admin" && (
                       <div className="mt-3 pt-3 border-top">
                         <div className="d-flex gap-2">
                           <button

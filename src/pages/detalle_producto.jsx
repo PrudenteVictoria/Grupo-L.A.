@@ -10,9 +10,10 @@ const ProductoDetalle = () => {
       return (
           <div>
               <p>No se pudo cargar el producto</p>
-              <Link to="/carrito">
-                  <button>Volver a Productos</button>
-              </Link>
+                <Link to="/hogar">
+                  <button>Volver a productos</button>
+                </Link>
+
         </div>
       );
     }
@@ -25,7 +26,7 @@ const ProductoDetalle = () => {
                 {producto.nombre}
                 <br />
                 <p><strong>Descripción: </strong> {producto.descripcion}</p>
-                <p>Precio: ${producto.avatar}</p>
+                <p><strong>Precio:</strong> ${producto.precio}</p>
                 <img src={producto.avatar} alt={producto.nombre} width="30%" />
             </li>
             <hr />

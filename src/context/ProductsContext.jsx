@@ -72,7 +72,7 @@ export const ProductsProvider = ({ children }) => {
 
   const agregarProducto = async (nuevoProducto) => {
     try {
-      const respuesta = await fetch('https://68d482e3214be68f8c696ae2.mockapi.io/api/productos', {
+      const respuesta = await fetch('https://68f99215ef8b2e621e7ca343.mockapi.io/api/productos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevoProducto),
@@ -91,7 +91,7 @@ export const ProductsProvider = ({ children }) => {
 
   const editarProducto = async (productoActualizado) => {
     try {
-      const respuesta = await fetch(`https://68d482e3214be68f8c696ae2.mockapi.io/api/productos/${productoActualizado.id}`, {
+      const respuesta = await fetch(`https://68f99215ef8b2e621e7ca343.mockapi.io/api/productos/${productoActualizado.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(productoActualizado),
