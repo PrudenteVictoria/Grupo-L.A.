@@ -2,23 +2,32 @@ import './App.css'
 import { Routes, Route } from "react-router-dom";
 
 import Main from './pages/Inicio.jsx'
-import Hogar from './pages/hogar.jsx'
+import Novelas from './pages/Novelas.jsx'
+import NoFiccion from './pages/NoFiccion.jsx';
+import Educativos from './pages/Educativos.jsx';
+import Infantil from './pages/Infantil.jsx';
+import CienciaFiccion from './pages/CienciaFiccion.jsx';
+
 import ProductoDetalle from './pages/detalle_producto.jsx';
 import Pagar from './pages/pagar.jsx'
 import RutaProtegida from './pages/RutaProtegida.jsx'
 import IniciarSesion from './pages/IniciarSesion.jsx'
+
 import {CartProvider} from './context/CartContext.jsx'
 import {AuthProvider} from './context/AuthContext.jsx'
 import { ProductsProvider } from "./context/ProductsContext";
+
 import Dashboard from "./pages/Dashboard";
 import FormularioProducto from "./components/AgregarProducto.jsx"
 import EditarProductos from "./components/EditarProductos.jsx"
 import EliminarProducto from './components/EliminarProducto.jsx';
+
 import Layout from './components/Layout';
+import ScrollToTop from "./components/scrollTop";
+
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css"
 
@@ -26,6 +35,7 @@ import "react-toastify/dist/ReactToastify.css"
 function App() {
   return (
     <div>
+      <ScrollToTop />
       <AuthProvider>
         <ProductsProvider>
           <CartProvider>
@@ -34,7 +44,12 @@ function App() {
 
               <Routes>
                 <Route path='/' element={<Main />} />
-                <Route path='/hogar' element={<Hogar />} />
+                <Route path='/novelas' element={<Novelas />} />
+                <Route path='/no-ficcion' element={<NoFiccion />} />
+                <Route path='/educativos' element={<Educativos />} />
+                <Route path='/infantil' element={<Infantil />} />
+                <Route path='/ciencia-ficcion' element={<CienciaFiccion />} />
+
                 <Route path="/productos/:id" element={<ProductoDetalle />} />
                 <Route path='/iniciar-sesion' element={<IniciarSesion/>}/>
 

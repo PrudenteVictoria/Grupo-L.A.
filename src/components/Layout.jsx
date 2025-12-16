@@ -20,24 +20,52 @@ function Layout({ children }) {
     };
 
     // Meta tags básicos
-    updateMetaTag('description', 'Explora nuestro catálogo completo de juegos de mesa únicos. Encuentra juegos históricos, clásicos, modernos y educativos. Compra en línea con los mejores precios.');
-    updateMetaTag('keywords', 'juegos de mesa, juegos históricos, juegos clásicos, juegos modernos, juegos educativos, tienda de juegos, comprar juegos de mesa');
-    updateMetaTag('author', 'Tienda de Juegos de Mesa');
+    updateMetaTag(
+      'description',
+      'Descubrí nuestra tienda de libros online. Novelas, clásicos, libros modernos, educativos y best sellers. Comprá libros al mejor precio.'
+    );
+  
+    updateMetaTag(
+      'keywords',
+      'libros, tienda de libros, novelas, clásicos, libros modernos, libros educativos, literatura, comprar libros online'
+    );
+  
+    updateMetaTag('author', 'Tienda de Libros');
     updateMetaTag('robots', 'index, follow');
-
-    // Open Graph para redes sociales
-    updateMetaTag('og:title', 'Tienda de Juegos de Mesa | Los Mejores Juegos', 'property');
-    updateMetaTag('og:description', 'Descubre una amplia variedad de juegos de mesa. Desde clásicos históricos hasta juegos modernos y educativos.', 'property');
+  
+    // Open Graph (Facebook, WhatsApp, LinkedIn)
+    updateMetaTag(
+      'og:title',
+      'Tienda de Libros | Literatura Clásica y Moderna',
+      'property'
+    );
+  
+    updateMetaTag(
+      'og:description',
+      'Explorá un amplio catálogo de libros: novelas, clásicos, literatura moderna y educativa. Comprá online de forma fácil y segura.',
+      'property'
+    );
+  
     updateMetaTag('og:type', 'website', 'property');
-    updateMetaTag('og:image', window.location.origin + '/logo.jpg', 'property');
+    updateMetaTag(
+      'og:image',
+      window.location.origin + '/libros-og.jpg',
+      'property'
+    );
     updateMetaTag('og:url', window.location.origin, 'property');
-    updateMetaTag('og:site_name', 'Tienda de Juegos de Mesa', 'property');
-
+    updateMetaTag('og:site_name', 'Tienda de Libros', 'property');
+  
     // Twitter Card
     updateMetaTag('twitter:card', 'summary_large_image');
-    updateMetaTag('twitter:title', 'Tienda de Juegos de Mesa');
-    updateMetaTag('twitter:description', 'Compra los mejores juegos de mesa en línea');
-    updateMetaTag('twitter:image', window.location.origin + '/logo.jpg');
+    updateMetaTag('twitter:title', 'Tienda de Libros');
+    updateMetaTag(
+      'twitter:description',
+      'Comprá novelas, clásicos y libros modernos en nuestra tienda online'
+    );
+    updateMetaTag(
+      'twitter:image',
+      window.location.origin + '/libros-og.jpg'
+    );
 
     // Canonical link
     let canonical = document.querySelector('link[rel="canonical"]');

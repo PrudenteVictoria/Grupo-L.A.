@@ -25,44 +25,57 @@ function Footer() {
         {/* columna 1 */}
         <div style={{ maxWidth: "200px" }}>
           <h2 style={{ marginBottom: "10px" }}>
-            <span style={{ color: "#000" }}>Muebles KM12</span>
+            <span style={{ color: "#000" }}>Librería Libertad</span>
             <span style={{ color: "limegreen" }}>*</span>
           </h2>
           <p style={{ lineHeight: "1.4" }}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
+            Librería online especializada en libros clásicos, modernos y
+            educativos. Descubrí historias para todas las edades.
           </p>
         </div>
 
         {/* columna 2 */}
         <div>
-          <h4 style={{ marginBottom: "10px" }}>ESPACIOS</h4>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, lineHeight: "1.6" }}>
-            <li>Living</li>
-            <li>Comedor</li>
-            <li>Dormitorio Adultos</li>
-            <li>Dormitorio Infantil/Juvenil</li>
-            <li>Dormitorio Bebé</li>
-            <li>Exterior</li>
+          <h4 style={{ marginBottom: "10px" }}>GÉNEROS</h4>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              lineHeight: "1.6",
+            }}
+          >
+            <li>Novela</li>
+            <li>Ciencia Ficción</li>
+            <li>Infantil y Juvenil</li>
+            <li>No Ficción</li>
+            <li>Educativos</li>
           </ul>
         </div>
 
         {/* columna 3 */}
         <div>
           <h4 style={{ marginBottom: "10px" }}>INSTITUCIONAL</h4>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, lineHeight: "1.6" }}>
-            <li>CONTACTO</li>
-            <li>SUCURSALES</li>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              lineHeight: "1.6",
+            }}
+          >
+            <li>Contacto</li>
+            <li>Comunidad</li>
           </ul>
           <p style={{ marginTop: "10px" }}>
-            <a href="mailto:chulawemuebles@gmail.com" style={{ color: "inherit" }}>
-              chulawemuebles@gmail.com
+            <a href="mailto:contacto@libroskm12.com" style={{ color: "inherit" }}>
+              contacto@libroskm12.com
             </a>
           </p>
           <p>
-            Luis Piedrabuena 4445 (Munro)
+            Av. de los Libros 1234
             <br />
-            Vicente Lopez
+            Buenos Aires
           </p>
         </div>
       </div>
@@ -80,7 +93,7 @@ function Footer() {
         }}
       >
         <div>
-          <span>© Copyright 2023.</span>
+          <span>© Copyright 2025.</span>
           <span style={{ marginLeft: "10px" }}>
             <a href="#" style={{ color: "inherit", textDecoration: "none" }}>
               Términos y Condiciones
@@ -91,7 +104,7 @@ function Footer() {
             </a>{" "}
             |{" "}
             <a href="#" style={{ color: "inherit", textDecoration: "none" }}>
-              Garantía
+              Envíos y Devoluciones
             </a>
           </span>
         </div>

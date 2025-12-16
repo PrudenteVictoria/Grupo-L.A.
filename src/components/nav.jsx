@@ -41,35 +41,35 @@ function Nav() {
                       textDecoration: "none"
                     }}>INICIO</Link>
                 </li>
-                <li><Link to="/hogar" 
+                <li><Link to="/novelas" 
                     style={{
                       color: "white",
                       textDecoration: "none"
-                    }}>HOGAR</Link>
+                    }}>NOVELAS</Link>
                 </li>
-                <li><Link to="/living" 
+                <li><Link to="/no-ficcion" 
                     style={{
                       color: "white",
                       textDecoration: "none"
-                    }}>LIVING</Link>
+                    }}>NO FICCION</Link>
                 </li>
-                <li><Link to="/cocina" 
+                <li><Link to="/educativos" 
                     style={{
                       color: "white",
                       textDecoration: "none"
-                    }}>COCINA</Link>
+                    }}>EDUCATIVOS</Link>
                 </li>
-                <li><Link to="/comedor" 
+                <li><Link to="/infantil" 
                     style={{
                       color: "white",
                       textDecoration: "none"
-                    }}>COMEDOR</Link>
+                    }}>INFANTIL</Link>
                 </li>
-                <li><Link to="/dormitorio" 
+                <li><Link to="/ciencia-ficcion" 
                     style={{
                       color: "white",
                       textDecoration: "none"
-                    }}>DORMITORIO</Link>
+                    }}>CIENCIA FICCIÓN</Link>
                 </li>
                 
             {/* ENLACE PARA ADMIN - Solo visible para admin */}

@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import styled from "styled-components"
 import { FaTruck, FaCreditCard, FaStar, FaShoppingCart } from "react-icons/fa";
-import { useState, useRef, useEffect } from "react";
 
 function Main () {
   return (
     <main style={{ padding: "20px" }}>
+
+      {/* H1 SEO PRINCIPAL */}
+      <h1 style={{ textAlign: "center", marginBottom: "10px" }}>
+        Librería Online – Libros Clásicos, Modernos y Educativos
+      </h1>
+
+      <p style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto 30px" }}>
+        Descubrí nuestra tienda online especializada en <strong>libros de literatura, historia,
+        ficción y educación</strong>. Comprá libros online con envíos a todo el país.
+      </p>
+
+      {/* Imagen destacada */}
       <section
         style={{
           display: "flex",
@@ -16,11 +26,12 @@ function Main () {
         }}
       >
         <img
-          src="https://picsum.photos/180?text=imagen+1"
-          alt="Imagen 1"
+          src="https://picsum.photos/180?text=libros"
+          alt="Catálogo de libros destacados"
           style={{ width: "500px", height: "500px", borderRadius: "8px" }}
         />
       </section>
+
       <Gallery />
       <Banner />
       <Categorias />
@@ -28,8 +39,10 @@ function Main () {
       <Beneficios />
       <Newsletter />
     </main>
-    );
-} export default Main;
+  );
+}
+
+export default Main;
 
 
 
@@ -40,7 +53,7 @@ function Banner() {
   return (
     <section
       style={{
-        backgroundColor: "#555", // gris oscuro del fondo
+        backgroundColor: "#555",
         color: "#fff",
         display: "flex",
         alignItems: "center",
@@ -50,32 +63,25 @@ function Banner() {
         gap: "40px",
       }}
     >
-      <div style={{ flex: "0 0 auto" }}>
-        <img
-          src="https://i.imgur.com/5R1PLeH.png" 
-          alt="Vista de producto en el hogar"
-          style={{
-            width: "220px",
-            height: "auto",
-            borderRadius: "8px",
-            objectFit: "contain",
-          }}
-        />
-      </div>
+      <img
+        src="https://i.imgur.com/5R1PLeH.png"
+        alt="Promociones en libros"
+        style={{ width: "220px", borderRadius: "8px" }}
+      />
 
       <div style={{ maxWidth: "500px" }}>
-        <h2 style={{ fontWeight: "bold", marginBottom: "10px" }}>
-          Descuentos imperdibles!
-        </h2>
-        <p style={{ fontSize: "16px", color: "#ddd" }}>
-          Débito o transferencia - 30% OFF en efectivo
+        <h2>Promociones especiales en libros</h2>
+        <p>
+          Aprovechá <strong>descuentos exclusivos</strong> en novelas, libros educativos
+          y literatura clásica.
         </p>
       </div>
     </section>
   );
 }
 
-export {Banner};
+export { Banner };
+
 
 
 
@@ -90,41 +96,45 @@ function Beneficios() {
   const items = [
     {
       icono: <FaTruck size={40} color="#b89a7e" />,
-      titulo: "Envíos a todo el país",
-      descripcion: "Entrega segura y rápida con nuestra flota logística.",
+      titulo: "Envíos de libros a todo el país",
+      descripcion: "Recibí tus libros de forma rápida y segura.",
     },
     {
       icono: <FaCreditCard size={40} color="#b89a7e" />,
-      titulo: "Todos los medios de pago",
-      descripcion: "Tarjetas, transferencia, efectivo y cuotas sin interés.",
+      titulo: "Pagos simples y seguros",
+      descripcion: "Aceptamos todos los medios de pago.",
     },
     {
       icono: <FaStar size={40} color="#b89a7e" />,
-      titulo: "Calidad garantizada",
-      descripcion: "Productos premium seleccionados y con garantía.",
+      titulo: "Libros de calidad garantizada",
+      descripcion: "Ediciones seleccionadas y autores reconocidos.",
     },
     {
       icono: <FaShoppingCart size={40} color="#b89a7e" />,
-      titulo: "Compras online seguras",
-      descripcion: "Realizá tus pedidos fácilmente desde cualquier dispositivo.",
+      titulo: "Compra online fácil",
+      descripcion: "Elegí tus libros desde cualquier dispositivo.",
     },
   ];
 
   return (
     <section className="beneficios">
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+        ¿Por qué elegir nuestra librería?
+      </h2>
+
       {items.map((item, index) => (
         <div key={index} className="beneficio">
           <div className="icono">{item.icono}</div>
-          <h4>{item.titulo}</h4>
+          <h3>{item.titulo}</h3>
           <p>{item.descripcion}</p>
-          {index < items.length - 1 && <div className="divider"></div>}
         </div>
       ))}
     </section>
   );
 }
 
-export {Beneficios};
+export { Beneficios };
+
 
 
 
@@ -134,6 +144,7 @@ export {Beneficios};
 function Newsletter() {
   return (
     <section
+      aria-labelledby="newsletter-title"
       style={{
         display: "flex",
         justifyContent: "center",
@@ -145,7 +156,9 @@ function Newsletter() {
         borderBottom: "1px solid #ddd",
       }}
     >
+      {/* H3 SEO (no rompe estilos) */}
       <h3
+        id="newsletter-title"
         style={{
           fontSize: "1.1rem",
           fontWeight: "bold",
@@ -153,12 +166,13 @@ function Newsletter() {
           width: "200px",
         }}
       >
-        Enterate de nuestras<br />promociones
+        Novedades y ofertas en libros
       </h3>
 
       <input
         type="email"
         placeholder="Tu correo electrónico"
+        aria-label="Correo electrónico para recibir novedades literarias"
         style={{
           padding: "8px",
           border: "1px solid #000",
@@ -168,6 +182,7 @@ function Newsletter() {
 
       <button
         type="submit"
+        aria-label="Suscribirse al newsletter de libros"
         style={{
           backgroundColor: "orangered",
           color: "#fff",
@@ -184,8 +199,6 @@ function Newsletter() {
     </section>
   );
 }
-
-export {Newsletter};
 
 
 
@@ -318,29 +331,33 @@ export {Gallery};
 
 function Categorias() {
   const categorias = [
-    { nombre: "Hogar", imagen: "https://picsum.photos/id/1018/600/800", link: "#" },
-    { nombre: "Living", imagen: "https://picsum.photos/id/1025/600/400", link: "#" },
-    { nombre: "Cocina", imagen: "https://picsum.photos/id/1016/600/500", link: "#" },
-    { nombre: "Comedor", imagen: "https://picsum.photos/id/1043/600/900", link: "#" },
-    { nombre: "Dormitorio", imagen: "https://picsum.photos/id/1035/600/700", link: "#" },
+    { nombre: "Novelas", imagen: "https://picsum.photos/id/1018/600/800" },
+    { nombre: "No Ficción", imagen: "https://picsum.photos/id/1025/600/400" },
+    { nombre: "Educativos", imagen: "https://picsum.photos/id/1016/600/500" },
+    { nombre: "Infantiles", imagen: "https://picsum.photos/id/1043/600/900" },
+    { nombre: "Ciencia Ficción", imagen: "https://picsum.photos/id/1035/600/700" },
   ];
 
   return (
     <section className="categorias-masonry">
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+        Categorías de libros
+      </h2>
+
       {categorias.map((cat, i) => (
-        <a href={cat.link} key={i} className={`categoria-item item${i + 1}`}>
-          <img src={cat.imagen} alt={cat.nombre} />
+        <article key={i} className={`categoria-item item${i + 1}`}>
+          <img src={cat.imagen} alt={`Libros de ${cat.nombre}`} />
           <div className="overlay">
             <h3>{cat.nombre}</h3>
-            <button>VER ESPACIO</button>
+            <p>Explorá nuestra colección de libros de {cat.nombre}.</p>
           </div>
-        </a>
+        </article>
       ))}
     </section>
   );
 }
 
-export  {Categorias};
+export { Categorias };
 
 
 

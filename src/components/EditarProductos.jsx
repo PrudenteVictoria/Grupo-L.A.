@@ -32,9 +32,9 @@ function EditarProductos() {
         precio: producto.precio.toString().replace(',', '.')
       };
         await editarProducto(productoEnviar); // 🔥 ACTUALIZA CONTEXTO
-        
+
         alert('Producto actualizado correctamente');
-        navigate('/hogar');
+        navigate('/novelas');
       } catch (error) {
         alert('Error al actualizar el producto');
         console.error(error);

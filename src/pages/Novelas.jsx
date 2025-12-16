@@ -1,16 +1,18 @@
-// ficcion.jsx
 import { useState} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import CarritoCompras from "./Carrito";
 import { useCartContext } from "../context/CartContext";
 import { useAuthContext } from "../context/AuthContext";
 import { useProducts } from "../context/ProductsContext";
 
-function Hogar() {
+
+function Novelas() {
   const { productos, cargando, error } = useProducts();
   const { agregarAlCarrito } = useCartContext();
   const { usuario } = useAuthContext();
   const navigate = useNavigate();
+  const location = useLocation();
+
 
   const [busqueda, setBusqueda] = useState("");
   const [paginaActual, setPaginaActual] = useState(1);
@@ -29,12 +31,17 @@ const manejarEditar = (producto) => {
 };
 
 
-    const productosFiltrados = productos.filter(
-    (producto) =>
-      producto.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      (producto.categoria &&
-        producto.categoria.toLowerCase().includes(busqueda.toLowerCase()))
-  );
+const novelas = productos.filter(
+  (producto) => producto.categoria?.toLowerCase() === "novela"
+);
+
+
+const productosFiltrados = novelas.filter(
+  (producto) =>
+    producto.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+    producto.categoria.toLowerCase().includes(busqueda.toLowerCase())
+);
+
 
   const indiceUltimoProducto = paginaActual * productosPorPagina;
   const indicePrimerProducto = indiceUltimoProducto - productosPorPagina;
@@ -102,13 +109,17 @@ const manejarEditar = (producto) => {
                  
                   <div className="mt-auto">
                     <div className="d-grid gap-2">
-                    <Link
-                      to={`/productos/${producto.id}`}
-                      state={{ producto }}
-                      className="btn btn-outline-primary btn-sm"
-                    >
-                      Ver detalles
-                    </Link>
+                  <Link
+                    to={`/productos/${producto.id}`}
+                    state={{
+                      producto,
+                      from: location.pathname
+                    }}
+                    className="btn btn-outline-primary btn-sm"
+                  >
+                    Ver detalles
+                  </Link>
+
 
                       <button
                         onClick={() => agregarAlCarrito(producto)}
@@ -175,4 +186,4 @@ const manejarEditar = (producto) => {
       </div>
     </>
   );
-} export default Hogar;
+} export default Novelas;
